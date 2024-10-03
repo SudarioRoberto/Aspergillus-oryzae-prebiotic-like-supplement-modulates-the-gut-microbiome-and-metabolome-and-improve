@@ -265,7 +265,7 @@ test.keepX <- list(
 # Run feature selection tuning
 tune.TCGA <- tune.block.splsda(X = data, Y = Y, ncomp = ncomp,
                                test.keepX = test.keepX, design = design,
-                               validation = 'Mfold', folds = 5, nrepeat = 6,
+                               validation = 'loo', nrepeat = 6,
                                dist = "centroids.dist", near.zero.var = TRUE)
 
 # Set optimal values of features to retain
