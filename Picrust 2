@@ -1,0 +1,34 @@
+
+srun --nodes=1 --cpus-per-task=100 --mem=700G --partition=msilarge --time=5:00:00 --pty bash
+
+module load qiime2/2023.2
+
+
+qiime tools export --input-path dada2-paired-end-rep-seqs1.qza --output-path exported-seqsPicrust2
+
+less exported-seqsPicrust2/dna-sequences.fasta
+
+qiime tools export --input-path dada2-paired-end-table1.qza --output-path exported-seqsPicrust2
+
+biom head -i exported-seqsfeature-table.biom
+
+biom summarize-table -i exported-seqsPicrust2/feature-table.biom
+
+#Convert Fast into .fna
+mv sequences.fasta sequences.fna
+
+
+picrust2_pipeline.py -s sequences.fna -i feature-table.biom -o picrust2_out --processes 100 --stratified --per_sequence_contrib
+
+
+add_descriptions.py -i EC_metagenome_out/pred_metagenome_unstrat.tsv.gz -m EC -o EC_metagenome_out/pred_metagenome_unstrat_descrip.tsv.gz
+
+add_descriptions.py -i KO_metagenome_out/pred_metagenome_unstrat.tsv.gz -m KO -o KO_metagenome_out/pred_metagenome_unstrat_descrip.tsv.gz
+
+add_descriptions.py -i pathways_out/path_abun_unstrat.tsv.gz -m METACYC -o pathways_out/path_abun_unstrat_descrip.tsv.gz
+
+
+
+
+
+
